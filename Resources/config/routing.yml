@@ -1,0 +1,3 @@
+dp_repo_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: DPRepoBundle:Default:index }

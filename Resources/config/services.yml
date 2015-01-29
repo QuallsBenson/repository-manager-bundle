@@ -1,0 +1,26 @@
+parameters:
+    dp_repo.config.database: %database_name%
+    dp_repo.config.host: %database_host%
+    dp_repo.config.driver: %database_driver%
+    dp_repo.config.username: %database_user%
+    dp_repo.config.password: %database_password%
+    dp_repo.config.template_path: Designplug/Repository/RepositoryManagerBundle/Repository/config/templates
+    dp_repo.config.repository_namespace: Designplug\Repository\RepositoryManagerBundle\Repository
+    dp_repo.config.model_namespace: Designplug\Repository\RepositoryManagerBundle\Model
+    dp_repo.config.repository_initializer_namespace: Designplug\Repository\RepositoryManagerBundle\RepositoryInitializer
+services:
+    dp_repo.manager:
+        class: Designplug\Repository\RepositoryManager
+        arguments: [%dp_repo.config.repository_namespace%, %dp_repo.config.model_namespace%, %dp_repo.config.repository_initializer_namespace%]
+        calls:
+            - [setDatabaseManager, ["@dp_repo.database.manager"]]
+    dp_repo.database.manager:
+        class: Designplug\Repository\RepositoryManagerBundle\Database\DatabaseManager
+        calls:
+            - [setConnectionParameters, ["%dp_repo.config.database%", "%dp_repo.config.driver%", "%dp_repo.config.host%", "%dp_repo.config.username%", "%dp_repo.config.password%"]]
+    dp_repo.manager.command:
+        class: Designplug\Repository\RepositoryManagerBundle\Command\GenerateCommand
+        calls:
+            - [setConfigurationOptions, ["%dp_repo.config.template_path%", "%dp_repo.config.repository_namespace%", "%dp_repo.config.model_namespace%", "%dp_repo.config.repository_initializer_namespace%"]]
+        tags: 
+            - { name: console.command }

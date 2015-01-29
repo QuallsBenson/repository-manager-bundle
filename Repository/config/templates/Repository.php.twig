@@ -1,0 +1,9 @@
+<?php {% if repositoryNamespace|default(false) %} namespace {{ repositoryNamespace }} {% endif %};
+
+use Designplug\Repository\Repository;
+
+class {{ repositoryName }} extends Repository{
+
+//defined repository methods here
+
+}

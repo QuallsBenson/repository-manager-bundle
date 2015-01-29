@@ -1,0 +1,14 @@
+{
+    "name": "designplug/repository-manager-bundle",
+    "description": "A Symfony Bundle Implementation of DesignPlug Repsotiory",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Richard Lee",
+            "email": "get@coding-stuff.com"
+        }
+    ],
+    "require": {
+        "designplug/illuminate": "v1.1.01"
+    }
+}

@@ -1,0 +1,22 @@
+<?php {% if repositoryInitializerNamespace|default(false) %} namespace {{ repositoryInitializerNamespace }}; {% endif %}
+
+
+use Designplug\Repository\RepositoryInitializer;
+{% if repositoryInitializerNamespace|default(false) %}
+use {{ repositoryNamespace }}\{{ repositoryName }};
+{% endif %}
+
+
+
+class {{ repositoryInitializerName }} extends RepositoryInitializer{
+
+  public function initialize($repository, array $services = array()){
+
+    if( ($repository instanceof {{ repositoryName }}) === false)
+      throw new \Exception('Repository must be an instance of {{ repositoryName }}');
+
+    parent::initialize($repository, $services);
+
+  }
+
+}
