@@ -1,6 +1,8 @@
 <?php {% if modelNamespace|default(false) %} namespace {{ modelNamespace }} {% endif %};
 
-class {{ modelName }}{
+use Illuminate\Database\Eloquent\Model as EloquentModel
+
+class {{ modelName }} extends EloquentModel {
 
 //add methods here
 

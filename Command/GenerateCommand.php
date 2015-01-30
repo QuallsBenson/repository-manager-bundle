@@ -9,6 +9,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Yaml;
+
 
 class GenerateCommand extends BaseCommand implements ContainerAwareInterface{
 
@@ -25,22 +27,46 @@ class GenerateCommand extends BaseCommand implements ContainerAwareInterface{
 
 	public function setConfigurationOptions($templatePath, $repositoryNamespace, $modelNamespace, $repositoryInitializerNamespace){
 
-		$options = array('templatePath' 	   			  => $templatePath,
-						 'repositoryNamespace' 			  => $repositoryNamespace,
-						 'modelNamespace'	   			  => $modelNamespace,
-						 'repositoryInitializerNamespace' => $repositoryInitializerNamespace);
+		$options = array('templatePath' 	   			  => $templatePath 		  				?: @$this->configOptions['templatePath'],
+						 'repositoryNamespace' 			  => $repositoryNamespace 				?: @$this->configOptions['repositoryNamespace'],
+						 'modelNamespace'	   			  => $modelNamespace 	  				?: @$this->configOptions['modelNamespace'],
+						 'repositoryInitializerNamespace' => $repositoryInitializerNamespace	?: @$this->configOptions['repositoryInitializerNamespace']);
 
 		$this->configOptions = $options;
+
+		return $this->configOptions;
+
+	}
+
+	protected function overrideDefaultConfiguration( $options ){
+
+		//get bundle param
+		$path   = $this->container->get( 'kernel' )->locateResource("@{$this->bundleName}/Resources/config/services.yml");
+		$config = Yaml::parse( file_get_contents($path) ); 
+
+		if(!isset($config['parameters'])) return $options;
+
+		$p = $config['parameters'];
+
+		$override = $this->setConfigurationOptions( @$p['dp_repo.config.template_path'], 
+											   		@$p['dp_repo.config.repository_namespace'],
+											   		@$p['dp_repo.config.model_namespace'],
+											   		@$p['dp_repo.config.repository_initializer_namespace'] );
+
+		return array_merge( $options, $override );
+
+
 
 	}
 
 	protected function getConfigurationOptions($repositoryName, InputInterface $input, OutputInterface $output){
 
-	    $options 		 			= $this->configOptions;
-	    $options['name'] 			= $this->repoName;
-	    $options['generationPath']	= $this->container->get( 'kernel' )->getRootDir();
+	    $this->configOptions['name'] 			= $this->repoName;
+	    $this->configOptions['generationPath']	= $this->container->get( 'kernel' )->getRootDir() .'/../src';
 
-	    return $options;
+		//load specified bundle config to override default options if it exists
+
+	    return $this->overrideDefaultConfiguration( $this->configOptions );
 
 	}
 
