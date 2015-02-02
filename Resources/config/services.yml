@@ -5,9 +5,9 @@ parameters:
     dp_repo.config.username: %database_user%
     dp_repo.config.password: %database_password%
     dp_repo.config.template_path: Designplug/Repository/RepositoryManagerBundle/Repository/config/templates
-    dp_repo.config.repository_namespace: Designplug\Repository\RepositoryManagerBundle\Repository
-    dp_repo.config.model_namespace: Designplug\Repository\RepositoryManagerBundle\Model
-    dp_repo.config.repository_initializer_namespace: Designplug\Repository\RepositoryManagerBundle\RepositoryInitializer
+#    dp_repo.config.repository_namespace: %dp_repo.config.repository_namespace%
+#    dp_repo.config.model_namespace: %dp_repo.config.model_namespace%
+#    dp_repo.config.repository_initializer_namespace: %dp_repo.config.repository_initializer_namespace%
 services:
     dp_repo.manager:
         class: Designplug\Repository\RepositoryManager

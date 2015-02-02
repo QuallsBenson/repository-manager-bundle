@@ -10,5 +10,6 @@
     ],
     "require": {
         "designplug/illuminate": "v1.1.01"
-    }
+    },
+    "target-dir": "Designplug/Repository/RepositoryManagerBundle"
 }

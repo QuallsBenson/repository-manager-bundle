@@ -43,10 +43,16 @@ class GenerateCommand extends BaseCommand implements ContainerAwareInterface{
 		//get bundle param
 		$path   = $this->container->get( 'kernel' )->locateResource("@{$this->bundleName}/Resources/config/services.yml");
 		$config = Yaml::parse( file_get_contents($path) ); 
+						
+		//if(!isset($config['parameters'])) return $options;
 
-		if(!isset($config['parameters'])) return $options;
+		$p = @$config['parameters'] ?: array();
 
-		$p = $config['parameters'];
+
+		if(!isset($p['dp_repo.config.repository_namespace']) ||
+		   !isset($p['dp_repo.config.model_namespace'])      ||
+		   !isset($p['dp_repo.config.repository_initializer_namespace']))
+				throw new \Exception('Cannot create Repository: Bundle configuration not set');
 
 		$override = $this->setConfigurationOptions( @$p['dp_repo.config.template_path'], 
 											   		@$p['dp_repo.config.repository_namespace'],
@@ -83,6 +89,9 @@ class GenerateCommand extends BaseCommand implements ContainerAwareInterface{
 		$name = $input->getArgument('name');
 
 		$this->setRepositoryName( $name );
+
+		//give an error if user attempts to build repo in this dir
+		if($this->bundleName === 'DPRepoBundle') throw new \Exception('Cannot create Repository in DPRepoBundle');
 
 		//throws error on failure
 		$bundle = $this->container->get( 'kernel' )->getBundle( $this->bundleName );
