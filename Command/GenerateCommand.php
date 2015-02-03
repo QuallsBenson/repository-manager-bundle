@@ -1,7 +1,5 @@
 <?php namespace Designplug\Repository\RepositoryManagerBundle\Command;
 
-require_once dirname(dirname(__FILE__)).'/vendor/autoload.php';
-
 use Designplug\Repository\CLI\Command\GenerateCommand as BaseCommand;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
