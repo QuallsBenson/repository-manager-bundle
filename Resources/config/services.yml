@@ -1,13 +1,11 @@
 parameters:
-    dp_repo.config.database: %database_name%
-    dp_repo.config.host: %database_host%
-    dp_repo.config.driver: %database_driver%
-    dp_repo.config.username: %database_user%
-    dp_repo.config.password: %database_password%
     dp_repo.config.template_path: Designplug/Repository/RepositoryManagerBundle/Repository/config/templates
-#    dp_repo.config.repository_namespace: %dp_repo.config.repository_namespace%
-#    dp_repo.config.model_namespace: %dp_repo.config.model_namespace%
-#    dp_repo.config.repository_initializer_namespace: %dp_repo.config.repository_initializer_namespace%
+    dp_repo.config.database:
+        database: %database_name%
+        host: %database_host%
+        driver: mysql
+        username: %database_user%
+        password: %database_password%
 services:
     dp_repo.manager:
         class: Designplug\Repository\RepositoryManager
@@ -17,7 +15,7 @@ services:
     dp_repo.database.manager:
         class: Designplug\Repository\RepositoryManagerBundle\Database\DatabaseManager
         calls:
-            - [setConnectionParameters, ["%dp_repo.config.database%", "%dp_repo.config.driver%", "%dp_repo.config.host%", "%dp_repo.config.username%", "%dp_repo.config.password%"]]
+            - [setConnectionParameters, [%dp_repo.config.database%]]
     dp_repo.manager.command:
         class: Designplug\Repository\RepositoryManagerBundle\Command\GenerateCommand
         calls:
