@@ -11,5 +11,10 @@
     "require": {
         "designplug/illuminate": "v1.1.1"
     },
+    "autoload": {
+        "psr-0":{
+            "Designplug\\Repository\\RepositoryManagerBundle": ""
+        }
+    },
     "target-dir": "Designplug/Repository/RepositoryManagerBundle"
 }
