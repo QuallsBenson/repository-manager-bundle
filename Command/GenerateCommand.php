@@ -12,10 +12,10 @@ use Symfony\Component\Yaml\Yaml;
 
 class GenerateCommand extends BaseCommand implements ContainerAwareInterface{
 
-	protected $container, 
+	protected $container,
 			  $configOptions,
 			  $bundleName,
-			  $repoName;
+			  $repositoryName;
 
 	public function setContainer(ContainerInterface $container = null){
 
@@ -23,62 +23,83 @@ class GenerateCommand extends BaseCommand implements ContainerAwareInterface{
 
 	}
 
-	public function setConfigurationOptions($templatePath, $repositoryNamespace, $modelNamespace, $repositoryInitializerNamespace){
-
-		$options = array('templatePath' 	   			  => $templatePath 		  				?: @$this->configOptions['templatePath'],
-						 'repositoryNamespace' 			  => $repositoryNamespace 				?: @$this->configOptions['repositoryNamespace'],
-						 'modelNamespace'	   			  => $modelNamespace 	  				?: @$this->configOptions['modelNamespace'],
-						 'repositoryInitializerNamespace' => $repositoryInitializerNamespace	?: @$this->configOptions['repositoryInitializerNamespace']);
+	public function setConfigurationOptions(array $options){
 
 		$this->configOptions = $options;
 
-		return $this->configOptions;
+	}
+
+	public function getBundleName(){
+
+		return $this->bundleName;
 
 	}
 
-	protected function overrideDefaultConfiguration( $options ){
+	public function getRepositoryName(){
 
-		//get bundle param
+		return $this->repositoryName;
+
+	}
+
+	protected function formatParameters(array $parameters){
+
+		$formattedParam = array();
+
+		foreach($parameters as $key => $value) {
+
+			//camel case each parameter key
+			$key = preg_replace_callback('/_([a-z])/', function($c){
+
+				  return strtoupper($c[1]);
+
+			}, $key );
+
+			//save the new key value pair in formatted array
+			$formattedParam[$key] =  $value;
+
+		}
+
+		return $formattedParam;
+	}
+
+	protected function getConfigurationFileContents(){
+
+		//get bundle parameters
 		$path   = $this->container->get( 'kernel' )->locateResource("@{$this->bundleName}/Resources/config/services.yml");
-		$config = Yaml::parse( file_get_contents($path) ); 
-						
-		//if(!isset($config['parameters'])) return $options;
+		$config = Yaml::parse( file_get_contents($path) );
 
-		$p = @$config['parameters'] ?: array();
+		$param  = @$config['parameters'] ?: array();
 
+		if(empty($param) || !isset($param['dp_repo.generator'])){
+			throw new \Exception("Repository Generation Parameters not found in @{$this->bundleName}/Resources/config/services.yml ");
+		}
 
-		if(!isset($p['dp_repo.config.repository_namespace']) ||
-		   !isset($p['dp_repo.config.model_namespace'])      ||
-		   !isset($p['dp_repo.config.repository_initializer_namespace']))
-				throw new \Exception('Cannot create Repository: Bundle configuration not set');
+		//build options array with parameters
+		$options = $this->formatParameters( $param['dp_repo.generator'] );
 
-		$override = $this->setConfigurationOptions( @$p['dp_repo.config.template_path'], 
-											   		@$p['dp_repo.config.repository_namespace'],
-											   		@$p['dp_repo.config.model_namespace'],
-											   		@$p['dp_repo.config.repository_initializer_namespace'] );
-
-		return array_merge( $options, $override );
-
-
+		return $options;
 
 	}
 
-	protected function getConfigurationOptions($repositoryName, InputInterface $input, OutputInterface $output){
+	protected function getConfigurationOptions(){
 
-	    $this->configOptions['name'] 			= $this->repoName;
-	    $this->configOptions['generationPath']	= $this->container->get( 'kernel' )->getRootDir() .'/../src';
+			//override default options
+		  $this->configOptions 				 = array_merge( $this->configOptions, $this->getConfigurationFileContents() );
+ 			$this->configOptions['name'] = $this->getRepositoryName();
 
-		//load specified bundle config to override default options if it exists
+      //set src directory to default if generation path not set
+			if(!isset( $this->configOptions['generationPath'] ))
+					$this->configOptions['generationPath'] = $this->container->get( 'kernel' )->getRootDir() .'/../src';
 
-	    return $this->overrideDefaultConfiguration( $this->configOptions );
+			return $this->configOptions;
 
 	}
 
 	protected function setRepositoryName($name){
 
 		$name = explode(":", $name);
-		$this->bundleName = $name[0];
-		$this->repoName   = $name[1];
+		$this->bundleName = trim($name[0]);
+		$this->repoName   = trim($name[1]);
 
 	}
 
@@ -89,14 +110,14 @@ class GenerateCommand extends BaseCommand implements ContainerAwareInterface{
 		$this->setRepositoryName( $name );
 
 		//give an error if user attempts to build repo in this dir
-		if($this->bundleName === 'DPRepoBundle') throw new \Exception('Cannot create Repository in DPRepoBundle');
+		if($this->getBundleName() === 'DPRepoBundle') throw new \Exception('Cannot create Repository in DPRepoBundle');
 
 		//throws error on failure
-		$bundle = $this->container->get( 'kernel' )->getBundle( $this->bundleName );
+		$bundle = $this->container->get( 'kernel' )->getBundle( $this->getBundleName() );
 
 		if($bundle) parent::execute($input, $output);
 
-	}	
+	}
 
 
 }

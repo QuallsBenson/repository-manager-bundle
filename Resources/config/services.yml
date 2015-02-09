@@ -1,11 +1,29 @@
 parameters:
     dp_repo.config.template_path: Designplug/Repository/RepositoryManagerBundle/Repository/config/templates
-    dp_repo.config.database:
+
+    dp_repo.database:
         database: %database_name%
         host: %database_host%
         driver: mysql
         username: %database_user%
         password: %database_password%
+
+    dp_repo.repository.autoload_namespace:
+        - [Designplug\Repository]
+
+    dp_repo.repository_initializer.autoload_namespace:
+        - [Designplug\RepositoryInitializer]
+
+    dp_repo.model.autoload_namespace:
+        - [Designplug\Model]
+
+    dp_repo.generator:
+        template_path: Path\to\templates
+        model_namespace: Designplug\Model
+        repository_namespace: Designplug\Respository
+        repository_initializer_namespace: Designplug\RepositoryInitializer
+
+
 services:
     dp_repo.manager:
         class: Designplug\Repository\RepositoryManager
@@ -20,5 +38,5 @@ services:
         class: Designplug\Repository\RepositoryManagerBundle\Command\GenerateCommand
         calls:
             - [setConfigurationOptions, ["%dp_repo.config.template_path%", "%dp_repo.config.repository_namespace%", "%dp_repo.config.model_namespace%", "%dp_repo.config.repository_initializer_namespace%"]]
-        tags: 
+        tags:
             - { name: console.command }
