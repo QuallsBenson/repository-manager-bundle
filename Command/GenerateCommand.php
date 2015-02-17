@@ -84,7 +84,7 @@ class GenerateCommand extends BaseCommand implements ContainerAwareInterface{
 	protected function getConfigurationOptions(){
 
 			//override default options
-		  $this->configOptions 				 = array_merge( $this->configOptions, $this->getConfigurationFileContents() );
+		    $this->configOptions 		 = array_merge( $this->configOptions, $this->getConfigurationFileContents() );
  			$this->configOptions['name'] = $this->getRepositoryName();
 
       //set src directory to default if generation path not set
@@ -98,8 +98,8 @@ class GenerateCommand extends BaseCommand implements ContainerAwareInterface{
 	protected function setRepositoryName($name){
 
 		$name = explode(":", $name);
-		$this->bundleName = trim($name[0]);
-		$this->repoName   = trim($name[1]);
+		$this->bundleName 		= trim($name[0]);
+		$this->repositoryName   = trim($name[1]);
 
 	}
 
