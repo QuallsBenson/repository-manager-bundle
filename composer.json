@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "designplug/illuminate": "v1.1.1"
+        "designplug/illuminate": "v1.1.15"
     },
     "autoload": {
         "psr-0":{

@@ -1,5 +1,4 @@
 parameters:
-    dp_repo.config.template_path: Designplug/Repository/RepositoryManagerBundle/Repository/config/templates
 
     dp_repo.database:
         database: %database_name%
@@ -8,35 +7,35 @@ parameters:
         username: %database_user%
         password: %database_password%
 
-    dp_repo.repository.autoload_namespace:
-        - [Designplug\Repository]
+    #dp_repo.repository.autoload_namespace:
+        #- [Designplug\Repository]
 
-    dp_repo.repository_initializer.autoload_namespace:
-        - [Designplug\RepositoryInitializer]
+    #dp_repo.repository_initializer.autoload_namespace:
+        #- [Designplug\RepositoryInitializer]
 
-    dp_repo.model.autoload_namespace:
-        - [Designplug\Model]
+    #dp_repo.model.autoload_namespace:
+        #- [Designplug\Model]
 
-    dp_repo.generator:
-        template_path: Path\to\templates
-        model_namespace: Designplug\Model
-        repository_namespace: Designplug\Respository
-        repository_initializer_namespace: Designplug\RepositoryInitializer
+    #dp_repo.generator:
+        #template_path: Path\to\templates
+        #model_namespace: Designplug\Model
+        #repository_namespace: Designplug\Respository
+        #repository_initializer_namespace: Designplug\RepositoryInitializer
 
 
 services:
     dp_repo.manager:
         class: Designplug\Repository\RepositoryManager
-        arguments: [%dp_repo.config.repository_namespace%, %dp_repo.config.model_namespace%, %dp_repo.config.repository_initializer_namespace%]
+        arguments: [%dp_repo.repository.autoload_namespace%, %dp_repo.model.autoload_namespace%, %dp_repo.repository_initializer.autoload_namespace%]
         calls:
             - [setDatabaseManager, ["@dp_repo.database.manager"]]
     dp_repo.database.manager:
         class: Designplug\Repository\RepositoryManagerBundle\Database\DatabaseManager
         calls:
-            - [setConnectionParameters, [%dp_repo.config.database%]]
+            - [setConnectionParameters, [%dp_repo.database%]]
     dp_repo.manager.command:
         class: Designplug\Repository\RepositoryManagerBundle\Command\GenerateCommand
         calls:
-            - [setConfigurationOptions, ["%dp_repo.config.template_path%", "%dp_repo.config.repository_namespace%", "%dp_repo.config.model_namespace%", "%dp_repo.config.repository_initializer_namespace%"]]
+            - [setConfigurationOptions, [%dp_repo.generator%]]
         tags:
             - { name: console.command }
