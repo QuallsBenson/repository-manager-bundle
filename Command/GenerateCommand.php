@@ -81,7 +81,7 @@ class GenerateCommand extends BaseCommand implements ContainerAwareInterface{
 
 	}
 
-	protected function getConfigurationOptions(){
+	protected function getConfigurationOptions($repositoryName, InputInterface $input, OutputInterface $output){
 
 			//override default options
 		    $this->configOptions 		 = array_merge( $this->configOptions, $this->getConfigurationFileContents() );
