@@ -1,22 +1,55 @@
-<?php namespace Quallsbenson\Symfony;
+<?php namespace Quallsbenson\Repository\RepositoryManagerBundle\Symfony;
 
 use Symfony\Component\Yaml\Yaml;
-use Quallsbenson\Repository\RepositoryManager;
 use Quallsbenson\Repository\RepositoryManagerBundle\Database\DatabaseManager;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Quallsbenson\Repository\RepositoryManager as RepoManager;
 
-class RepositoryManager{
+class RepositoryManager implements ContainerAwareInterface{
 
 
 	protected $RepositoryManagers = [],
-			  $databaseManager;
+			  $databaseManager,
+			  $Container;
 
 
 	public function __construct( DatabaseManager $databaseManager )
 	{
 
-		$this->setDatabaseManager( $databaseManager )
+		$this->setDatabaseManager( $databaseManager );
 
 	}	
+
+
+	/**
+	*
+	*  set the container 
+	*  @return null
+	*
+	**/
+
+	public function setContainer( ContainerInterface $container = null )
+	{
+
+		return $this->Container = $container;
+
+	}
+
+
+	/**
+	*
+	*  Get the container 
+	*  @return Symfony\Component\DependencyInjection\ContainerInterface
+	*
+	**/
+
+	public function getContainer()
+	{
+
+		return $this->Container;
+
+	}
 
 	/**
 	*
@@ -65,6 +98,8 @@ class RepositoryManager{
 		//set the database manager for the repository manager
 		$manager->setDatabaseManager( $this->getDatabaseManager() );
 
+		return $manager;
+
 	}
 
 
@@ -79,7 +114,7 @@ class RepositoryManager{
 	public function getConfig( $bundle )
 	{
 
-		$file   = $this->get( 'kernel' )->locateResource("@{$bundle}/Resources/config/services.yml");
+		$file   = $this->Container->get( 'kernel' )->locateResource("@{$bundle}/Resources/config/services.yml");
 		$config = Yaml::parse( file_get_contents($file) );
 
 		return  @$config['parameters'] ?: array();
@@ -124,9 +159,9 @@ class RepositoryManager{
 	protected function makeRepositoryManager($bundle, $config)
 	{
 
-		$manager  = new RepositoryManager($config['qb_repo.repository.autoload_namespace'], 
-										  $config['qb_repo.model.autoload_namespace'], 
-										  $config['qb_repo.repository_initializer.autoload_namespace'] );
+		$manager  = new RepoManager($config['qb_repo.repository.autoload_namespace'], 
+									$config['qb_repo.model.autoload_namespace'], 
+								    $config['qb_repo.repository_initializer.autoload_namespace'] );
 
 
 		return $this->RepositoryManagers[$bundle] = $manager;
