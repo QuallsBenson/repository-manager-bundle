@@ -1,6 +1,6 @@
 {
-    "name": "designplug/repository-manager-bundle",
-    "description": "A Symfony Bundle Implementation of DesignPlug Repsotiory",
+    "name": "quallsbenson/repository-manager-bundle",
+    "description": "A Symfony Bundle Implementation of Quallsbenson Repsotiory",
     "license": "MIT",
     "authors": [
         {
@@ -9,12 +9,12 @@
         }
     ],
     "require": {
-        "designplug/illuminate": "v1.1.15"
+        "quallsbenson/illuminate": "v0.1.0"
     },
     "autoload": {
         "psr-0":{
-            "Designplug\\Repository\\RepositoryManagerBundle": ""
+            "Quallsbenson\\Repository\\RepositoryManagerBundle": ""
         }
     },
-    "target-dir": "Designplug/Repository/RepositoryManagerBundle"
+    "target-dir": "Quallsbenson/Repository/RepositoryManagerBundle"
 }

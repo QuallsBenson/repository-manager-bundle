@@ -1,6 +1,6 @@
 <?php
 
-namespace Designplug\Repository\RepositoryManagerBundle\DependencyInjection;
+namespace Quallsbenson\Repository\RepositoryManagerBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

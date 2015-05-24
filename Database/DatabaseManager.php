@@ -1,8 +1,8 @@
-<?php namespace Designplug\Repository\RepositoryManagerBundle\Database;
+<?php namespace Quallsbenson\Repository\RepositoryManagerBundle\Database;
 
-use Designplug\Illuminate\Database\DatabaseManager as Manager;
+use Quallsbenson\Illuminate\Database\DatabaseManager as Manager;
 
-class DatabaseManager extends manager{
+class DatabaseManager extends Manager{
 
   public function setConnectionParameters(array $param){
 /*

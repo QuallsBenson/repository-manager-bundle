@@ -1,6 +1,6 @@
-<?php  namespace Designplug\Repository\RepositoryManagerBundle\Repository ;
+<?php  namespace Quallsbenson\Repository\RepositoryManagerBundle\Repository ;
 
-use Designplug\Repository\Repository;
+use Quallsbenson\Repository\Repository;
 
 class EntityRepository extends Repository{
 

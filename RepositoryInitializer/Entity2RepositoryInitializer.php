@@ -1,7 +1,7 @@
-<?php  namespace Designplug\Repository\RepositoryManagerBundle\RepositoryInitializer; 
+<?php  namespace Quallsbenson\Repository\RepositoryManagerBundle\RepositoryInitializer; 
 
-use Designplug\Repository\RepositoryInitializer;
-use Designplug\Repository\RepositoryManagerBundle\Repository\Entity2Repository;
+use Quallsbenson\Repository\RepositoryInitializer;
+use Quallsbenson\Repository\RepositoryManagerBundle\Repository\Entity2Repository;
 
 
 

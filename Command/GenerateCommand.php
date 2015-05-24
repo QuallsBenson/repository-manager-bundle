@@ -1,6 +1,6 @@
-<?php namespace Designplug\Repository\RepositoryManagerBundle\Command;
+<?php namespace Quallsbenson\Repository\RepositoryManagerBundle\Command;
 
-use Designplug\Repository\CLI\Command\GenerateCommand as BaseCommand;
+use Quallsbenson\Repository\CLI\Command\GenerateCommand as BaseCommand;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -70,12 +70,12 @@ class GenerateCommand extends BaseCommand implements ContainerAwareInterface{
 
 		$param  = @$config['parameters'] ?: array();
 
-		if(empty($param) || !isset($param['dp_repo.generator'])){
+		if(empty($param) || !isset($param['qb_repo.generator'])){
 			throw new \Exception("Repository Generation Parameters not found in @{$this->bundleName}/Resources/config/services.yml ");
 		}
 
 		//build options array with parameters
-		$options = $this->formatParameters( $param['dp_repo.generator'] );
+		$options = $this->formatParameters( $param['qb_repo.generator'] );
 
 		return $options;
 
@@ -110,7 +110,7 @@ class GenerateCommand extends BaseCommand implements ContainerAwareInterface{
 		$this->setRepositoryName( $name );
 
 		//give an error if user attempts to build repo in this dir
-		if($this->getBundleName() === 'DPRepoBundle') throw new \Exception('Cannot create Repository in DPRepoBundle');
+		if($this->getBundleName() === 'QBRepoBundle') throw new \Exception('Cannot create Repository in QBRepoBundle');
 
 		//throws error on failure
 		$bundle = $this->container->get( 'kernel' )->getBundle( $this->getBundleName() );

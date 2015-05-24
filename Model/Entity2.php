@@ -1,4 +1,4 @@
-<?php  namespace Designplug\Repository\RepositoryManagerBundle\Model ;
+<?php  namespace Quallsbenson\Repository\RepositoryManagerBundle\Model ;
 
 class Entity2{
 

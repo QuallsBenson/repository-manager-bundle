@@ -1,41 +1,39 @@
 parameters:
 
-    dp_repo.database:
+    qb_repo.database:
         database: %database_name%
         host: %database_host%
         driver: mysql
         username: %database_user%
         password: %database_password%
 
-    #dp_repo.repository.autoload_namespace:
-        #- [Designplug\Repository]
+    #qb_repo.repository.autoload_namespace:
+        #- [Quallsbenson\Repository]
 
-    #dp_repo.repository_initializer.autoload_namespace:
-        #- [Designplug\RepositoryInitializer]
+    #qb_repo.repository_initializer.autoload_namespace:
+        #- [Quallsbenson\RepositoryInitializer]
 
-    #dp_repo.model.autoload_namespace:
-        #- [Designplug\Model]
+    #qb_repo.model.autoload_namespace:
+        #- [Quallsbenson\Model]
 
-    #dp_repo.generator:
+    #qb_repo.generator:
         #template_path: Path\to\templates
-        #model_namespace: Designplug\Model
-        #repository_namespace: Designplug\Respository
-        #repository_initializer_namespace: Designplug\RepositoryInitializer
+        #model_namespace: Quallsbenson\Model
+        #repository_namespace: Quallsbenson\Respository
+        #repository_initializer_namespace: Quallsbenson\RepositoryInitializer
 
 
 services:
-    dp_repo.manager:
-        class: Designplug\Repository\RepositoryManager
-        arguments: [%dp_repo.repository.autoload_namespace%, %dp_repo.model.autoload_namespace%, %dp_repo.repository_initializer.autoload_namespace%]
+    qb_repo.manager:
+        class: Quallsbenson\Symfony\RepositoryManager
+        arguments: ["@qb_repo.database.manager"]
+    qb_repo.database.manager:
+        class: Quallsbenson\Repository\RepositoryManagerBundle\Database\DatabaseManager
         calls:
-            - [setDatabaseManager, ["@dp_repo.database.manager"]]
-    dp_repo.database.manager:
-        class: Designplug\Repository\RepositoryManagerBundle\Database\DatabaseManager
+            - [setConnectionParameters, [%qb_repo.database%]]
+    qb_repo.manager.command:
+        class: Quallsbenson\Repository\RepositoryManagerBundle\Command\GenerateCommand
         calls:
-            - [setConnectionParameters, [%dp_repo.database%]]
-    dp_repo.manager.command:
-        class: Designplug\Repository\RepositoryManagerBundle\Command\GenerateCommand
-        calls:
-            - [setConfigurationOptions, [%dp_repo.generator%]]
+            - [setConfigurationOptions, [%qb_repo.generator%]]
         tags:
             - { name: console.command }
