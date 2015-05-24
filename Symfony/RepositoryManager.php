@@ -16,8 +16,7 @@ class RepositoryManager{
 
 		$this->setDatabaseManager( $databaseManager )
 
-	}		  
-
+	}	
 
 	/**
 	*

@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "quallsbenson/illuminate": "v0.1.0"
+        "quallsbenson/illuminate": "dev-master"
     },
     "autoload": {
         "psr-0":{
