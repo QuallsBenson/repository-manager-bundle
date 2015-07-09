@@ -166,6 +166,8 @@ class RepositoryManagerConfigurator implements ContainerAwareInterface{
 
 		$manager->setContainer( $this->getContainer() );
 
+		$manager->setBundleName( $bundle );
+
 
 		return $this->RepositoryManagers[$bundle] = $manager;
 

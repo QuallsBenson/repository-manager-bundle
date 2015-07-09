@@ -9,7 +9,7 @@ use Quallsbenson\Repository\RepositoryManager as BaseRepoManager;
 class RepositoryManager extends BaseRepoManager implements ContainerAwareInterface{
 
 
-	protected $Container;
+	protected $Container, $bundle;
 
 	/**
 	*
@@ -44,7 +44,32 @@ class RepositoryManager extends BaseRepoManager implements ContainerAwareInterfa
 	public function getInitializationServices( $name )
 	{
 
-		return $this->getContainer()->getParameter( $name.".services" ) ?: [];
+		return $this->getContainer()->getParameter( $this->getBundleName().".".$name.".repository_services" ) ?: [];
+
+	}
+
+	/**
+	* set the name of the bundle
+	**/
+
+
+	public function setBundleName( $name )
+	{
+
+		$this->bundle = (string) $name;
+		return $this;
+
+	}
+
+	/**
+	* get the name of the bundle
+	**/
+
+
+	public function getBundleName()
+	{
+
+		return $this->bundle;
 
 	}
 
