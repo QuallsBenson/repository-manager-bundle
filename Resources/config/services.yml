@@ -25,7 +25,7 @@ parameters:
 
 services:
     qb_repo.manager:
-        class: Quallsbenson\Repository\RepositoryManagerBundle\Symfony\RepositoryManager
+        class: Quallsbenson\Repository\RepositoryManagerBundle\Symfony\RepositoryManagerConfigurator
         arguments: ["@qb_repo.database.manager"]
         calls: 
             - [setContainer, ["@service_container"]]
