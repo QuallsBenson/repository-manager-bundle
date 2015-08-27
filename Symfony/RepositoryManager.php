@@ -52,14 +52,17 @@ class RepositoryManager extends BaseRepoManager implements ContainerAwareInterfa
 	protected function getServicesFromConfig( $name )
 	{
 
-		$services = $this->getContainer()->getParameter( $this->getBundleName().".".$name.".repository_services" );
+		$serviceKey = $this->getBundleName().".".$name.".repository_services";
+		$app        = $this->getContainer();
+
+		$services   = $app->hasParameter( $serviceKey ) ? $app->getParameter( $serviceKey ) : [];
 		
 		$configuredServices  = [];
 
-		foreach( $services as $key => $val )
+		foreach( $services as $key => $service )
 		{
 
-			$configuredServices[ $key ] = $this->getContainer()->get( $key );
+			$configuredServices[ $key ] = $app->get( $service );
 
 		}
 
